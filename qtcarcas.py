@@ -11,7 +11,7 @@ class Carcass(QtGui.QWidget):
         self.init_ui()
 
     def init_ui(self):
-        self.showMaximized()
+        self.setGeometry(0, 0, 800, 600)
         self.setWindowTitle('Points')
         self.show()
 

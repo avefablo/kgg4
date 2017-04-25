@@ -5,17 +5,19 @@ def f(x, y):
     return math.cos(x * y)
 
 
-def coord_x(x, y, z):
+def coord_x(x, y, z, rev=False):
+    if rev:
+        x, y = y, x
     return -x / (2 * math.sqrt(2)) + y
-    # return (y-x)*math.sqrt(3)/2
 
 
-def coord_y(x, y, z):
+def coord_y(x, y, z, rev=False):
+    if rev:
+        x, y = y, x
     return x / (2 * math.sqrt(2)) - z
-    # return (x+y)/2-z
 
 
-def main():
+def main(reverse=False):
     mx = 800
     my = 600
     x1 = -3
@@ -24,8 +26,8 @@ def main():
     y2 = 3
     n = 100
     m = mx * 2
-    top = [my] * (mx)
-    bottom = [0] * (mx)
+    top = [my] * mx
+    bottom = [0] * mx
     miny = minx = 10000
     maxy = maxx = -minx
     i = 0
@@ -35,10 +37,8 @@ def main():
         while j <= n:
             y = y2 + j * (y1 - y2) / n
             z = f(x, y)
-            xx = coord_x(x, y, z)
-            yy = coord_y(x, y, z)
-
-
+            xx = coord_x(x, y, z, rev=reverse)
+            yy = coord_y(x, y, z, rev=reverse)
             if xx > maxx:
                 maxx = xx
             if yy > maxy:
@@ -63,33 +63,35 @@ def main():
         while j <= mx * 2:
             y = y2 + j * (y1 - y2) / (mx * 2)
             z = f(x, y)
-            xx = coord_x(x, y, z)
-            yy = coord_y(x, y, z)
+            xx = coord_x(y, x, z, rev=reverse)
+            yy = coord_y(y, x, z, rev=reverse)
+
             xx = int((xx - minx) / (maxx - minx) * mx)
             yy = int((yy - miny) / (maxy - miny) * my)
             if xx >= mx:
                 j += 1
                 continue
             if yy > bottom[xx]:
-                putpixel(xx, yy, 1)
+                putpixel(xx, yy, 'red')
                 bottom[xx] = yy
             if yy < top[xx]:
-                putpixel(xx, yy, 3)
+                putpixel(xx, yy, 'blue')
                 top[xx] = yy
             j += 1
         i += 1
 
 
 def putpixel(x, y, c):
-    canv.create_oval(x, y, x + 1, y + 1)
+    canv.create_oval(x, y, x, y, outline=c)
 
 
-x = 800
-y = 600
+w = 800
+h = 600
 win = tkinter.Tk()
-canv = tkinter.Canvas(win, height=y, width=x)
+canv = tkinter.Canvas(win, height=h, width=w)
 # xMax = GetSystemMetrics(0)
 # yMax = GetSystemMetrics(1)
 main()
+main(True)
 canv.pack()
 win.mainloop()

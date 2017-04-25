@@ -5,11 +5,11 @@ from PyQt4 import QtGui
 import sys
 from drawer import KGG3DDrawer
 from qtcarcas import Carcass
-from math import sin
+from math import cos
 
 def main():
     app = QtGui.QApplication(sys.argv)
-    t = lambda x, y: sin(x * y)
+    t = lambda x, y: cos(x * y)
     ex = Carcass(KGG3DDrawer(t))
     sys.exit(app.exec_())
 

@@ -2,6 +2,7 @@ from qtcarcas import Drawer
 from math import sqrt, sin, cos, tan
 from PyQt4 import QtCore
 
+
 class KGG3DDrawer(Drawer):
     def __init__(self, func):
         super().__init__()
@@ -20,8 +21,8 @@ class KGG3DDrawer(Drawer):
         n = 100
         miny = minx = 10000
         maxy = maxx = -minx
-        top = [self.size.height()]*(self.size.width())
-        bottom = [0]*(self.size.width())
+        top = [self.size.height()] * (self.size.width())
+        bottom = [0] * (self.size.width())
         for i in range(0, n + 1):
             x = x2 + i * (x1 - x2) / n
             for j in range(0, n):
@@ -43,9 +44,11 @@ class KGG3DDrawer(Drawer):
                 y = y2 + j * (y1 - y2) / (self.size.width() * 2)
 
                 z = self.func(x, y)
+
                 xx, yy = self.get_point_dimetry(x, y, z, reverse)
                 xx = int((xx - minx) / (maxx - minx) * self.size.width())
                 yy = int((yy - miny) / (maxy - miny) * self.size.height())
+
                 if xx >= self.size.width():
                     continue
                 if yy > bottom[xx]:
@@ -56,14 +59,12 @@ class KGG3DDrawer(Drawer):
                     self.draw_point(qp, xx, yy, QtCore.Qt.blue)
                     top[xx] = yy
 
-
     @staticmethod
     def get_point_dimetry(x, y, z, reverse):
         if reverse:
             x, y = y, x
-        return -x/(2*sqrt(2)) + y, x/(2*sqrt(2)) - z
+        return -x / (2 * sqrt(2)) + y, x / (2 * sqrt(2)) - z
 
     def draw_point(self, qp, x, y, color):
         qp.setPen(color)
         qp.drawPoint(x, y)
-

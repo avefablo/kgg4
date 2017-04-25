@@ -17,7 +17,7 @@ class KGG3DDrawer(Drawer):
         x2 = 3
         y1 = -3
         y2 = 3
-        n = 125
+        n = 100
         miny = minx = 10000
         maxy = maxx = -minx
         top = [self.size.height()]*(self.size.width())

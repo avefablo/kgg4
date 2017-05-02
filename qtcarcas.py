@@ -7,8 +7,8 @@ class Carcass(QtGui.QWidget):
         super(Carcass, self).__init__()
 
         self.drawer = drawer
-        self.drawer.size = self.size()
         self.init_ui()
+        self.drawer.size = self.size()
 
     def init_ui(self):
         self.setGeometry(0, 0, 800, 600)

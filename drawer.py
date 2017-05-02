@@ -10,11 +10,12 @@ class KGG3DDrawer(Drawer):
         self.size = None
         self.func = func
         self.pxls = []
+        self.fls = []
 
     def draw(self, qp):
         self.f2(qp)
         self.f2(qp, reverse=True)
-        self.cleanup(qp)
+        self.cleanup2(qp)
 
     def init_pxls(self):
         w = self.size.width()
@@ -32,19 +33,34 @@ class KGG3DDrawer(Drawer):
                     self.draw_point(qp, xx, pxl[0], QtCore.Qt.white)
             xx += 1
 
+    def cleanup2(self, qp):
+        xx = 0
+        for col in self.pxls:
+            try:
+                top_p = min(self.fls[0][xx] + self.fls[1][xx])
+                bot_p = max(self.fls[0][xx]+self.fls[1][xx])
+            except:
+                continue
+            for yy in col:
+
+                if col[yy] == 'r' and yy < bot_p:
+                    self.draw_point(qp, xx, yy, QtCore.Qt.white)
+                if col[yy] == 'b' and yy > top_p:
+                    self.draw_point(qp, xx, yy, QtCore.Qt.white)
+            xx += 1
+
     def f2(self, qp, reverse=False):
         x1 = -2
         x2 = 4
         y1 = -3
         y2 = 5
-        n = 100
+        n = 75
         miny = minx = 10000
         maxy = maxx = -minx
         top = [self.size.height()] * (self.size.width())
         bottom = [0] * (self.size.width())
         self.init_pxls()
         for i in range(0, n + 1):
-
             if reverse:
                 y = y2 + i * (y1 - y2) / n
             else:
@@ -68,12 +84,12 @@ class KGG3DDrawer(Drawer):
         for i in range(0, n + 1):
             last_bot = (None, None)
             last_top = (None, None)
+            line = [list() for x in range(self.size.width())]
             if reverse:
                 y = y2 + i * (y1 - y2) / n
             else:
                 x = x2 + i * (x1 - x2) / n
             for j in range(self.size.width() * 2 + 1):
-
                 if reverse:
                     x = x2 + j * (x1 - x2) / (self.size.width() * 2)
                 else:
@@ -89,8 +105,8 @@ class KGG3DDrawer(Drawer):
                 if yy > bottom[xx]:
                     # self.draw_point(qp, xx, yy, QtCore.Qt.red)
                     self.brez(qp, (xx, yy), last_bot, QtCore.Qt.red)
-                    if xx in self.pxls and self.pxls[xx][yy] == 'b':
-                        continue
+                    if i == 0:
+                        line[xx].append(yy)
                     bottom[xx] = yy
                     last_bot = (xx, yy)
                     last_top = (None, None)
@@ -99,6 +115,8 @@ class KGG3DDrawer(Drawer):
                 if yy < top[xx]:
                     # self.draw_point(qp, xx, yy, QtCore.Qt.blue)
                     self.brez(qp, (xx, yy), last_top, QtCore.Qt.blue)
+                    if i == 0:
+                        line[xx].append(yy)
                     top[xx] = yy
                     last_top = (xx, yy)
                     last_bot = (None, None)
@@ -108,6 +126,8 @@ class KGG3DDrawer(Drawer):
                 if middle:
                     last_bot = (None, None)
                     last_top = (None, None)
+            if i == 0:
+                self.fls.append(line)
 
     @staticmethod
     def get_point_dimetry(x, y, z):

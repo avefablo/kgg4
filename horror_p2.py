@@ -79,7 +79,7 @@ def main(reverse=False):
 
 
 def putpixel(x, y, c):
-    canv.create_oval(x, y, x, y, outline=c)
+    canv.create_line(x, y, x+1, y+1, fill=c)
 
 
 w = 800

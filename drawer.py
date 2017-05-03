@@ -13,7 +13,7 @@ class KGG3DDrawer(Drawer):
         self.fls = []
 
     def draw(self, qp):
-        #self.f2(qp)
+        self.f2(qp)
         self.f2(qp, reverse=True)
         self.cleanup(qp)
     def init_pxls(self):
@@ -72,7 +72,6 @@ class KGG3DDrawer(Drawer):
                     x = x2 + j * (x1 - x2) / n
                 else:
                     y = y2 + j * (y1 - y2) / n
-                print(x, y)
                 z = self.func(x, y)
                 xx, yy = self.get_point_dimetry(x, y, z)
                 if xx > maxx:

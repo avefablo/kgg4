@@ -13,10 +13,9 @@ class KGG3DDrawer(Drawer):
         self.fls = []
 
     def draw(self, qp):
-        self.f2(qp)
+        #self.f2(qp)
         self.f2(qp, reverse=True)
-        self.cleanup2(qp)
-
+        self.cleanup(qp)
     def init_pxls(self):
         w = self.size.width()
         if len(self.pxls) < w:
@@ -26,7 +25,10 @@ class KGG3DDrawer(Drawer):
     def cleanup(self, qp):
         xx = 0
         for col in self.pxls:
-            b = max(filter(lambda x: x[1] == 'b', col.items()))
+            try:
+                b = max(filter(lambda x: x[1] == 'b', col.items()))
+            except:
+                continue
             b = b[0]
             for pxl in filter(lambda x: x[1] == 'r', col.items()):
                 if pxl[0] < b:
@@ -38,7 +40,7 @@ class KGG3DDrawer(Drawer):
         for col in self.pxls:
             try:
                 top_p = min(self.fls[0][xx] + self.fls[1][xx])
-                bot_p = max(self.fls[0][xx]+self.fls[1][xx])
+                bot_p = max(self.fls[0][xx] + self.fls[1][xx])
             except:
                 continue
             for yy in col:
@@ -52,15 +54,15 @@ class KGG3DDrawer(Drawer):
     def f2(self, qp, reverse=False):
         x1 = -2
         x2 = 4
-        y1 = -3
-        y2 = 5
-        n = 75
-        miny = minx = 10000
+        y1 = -4
+        y2 = 2
+        n = 100
+        miny = minx = 1000000
         maxy = maxx = -minx
         top = [self.size.height()] * (self.size.width())
         bottom = [0] * (self.size.width())
         self.init_pxls()
-        for i in range(0, n + 1):
+        for i in range(n):
             if reverse:
                 y = y2 + i * (y1 - y2) / n
             else:
@@ -70,6 +72,7 @@ class KGG3DDrawer(Drawer):
                     x = x2 + j * (x1 - x2) / n
                 else:
                     y = y2 + j * (y1 - y2) / n
+                print(x, y)
                 z = self.func(x, y)
                 xx, yy = self.get_point_dimetry(x, y, z)
                 if xx > maxx:
@@ -81,7 +84,7 @@ class KGG3DDrawer(Drawer):
                 if yy < miny:
                     miny = yy
 
-        for i in range(0, n + 1):
+        for i in range(0, n):
             last_bot = (None, None)
             last_top = (None, None)
             line = [list() for x in range(self.size.width())]

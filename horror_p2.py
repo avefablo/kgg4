@@ -5,15 +5,11 @@ def f(x, y):
     return math.sin(x * y) ** 2
 
 
-def coord_x(x, y, z, rev=False):
-    if rev:
-        x, y = y, x
+def coord_x(x, y, z):
     return -x / (2 * math.sqrt(2)) + y
 
 
-def coord_y(x, y, z, rev=False):
-    if rev:
-        x, y = y, x
+def coord_y(x, y, z):
     return x / (2 * math.sqrt(2)) - z
 
 
@@ -25,20 +21,25 @@ def main(reverse=False):
     y1 = -4
     y2 = 2
     n = 100
-    m = mx * 2
     top = [my] * mx
     bottom = [0] * mx
-    miny = minx = 10000
+    miny = minx = 1000000
     maxy = maxx = -minx
-    i = 0
-    while i <= n:
-        x = x2 + i * (x1 - x2) / n
-        j = 0
-        while j <= n:
-            y = y2 + j * (y1 - y2) / n
+    
+    for i in range(n):
+        
+        if reverse:
+            y = y2 + i * (y1 - y2) / n
+        else:
+            x = x2 + i * (x1 - x2) / n
+        for j in range(n):
+            if reverse:
+                x = x2 + j * (x1 - x2) / n
+            else:
+                y = y2 + j * (y1 - y2) / n
             z = f(x, y)
-            xx = coord_x(x, y, z, rev=reverse)
-            yy = coord_y(x, y, z, rev=reverse)
+            xx = coord_x(x, y, z)
+            yy = coord_y(x, y, z)
 
             if xx > maxx:
                 maxx = xx
@@ -48,30 +49,25 @@ def main(reverse=False):
                 minx = xx
             if yy < miny:
                 miny = yy
-            j += 1
-        i += 1
 
-    #    i=0
-    #   while i < mx:
-    #      top[i]=my
-    #     bottom[i]=0
-    #    i += 1
 
-    i = 0
-    while i <= n:
-        x = x2 + i * (x1 - x2) / n
-        j = 0
-        while j <= mx * 2:
-            y = y2 + j * (y1 - y2) / (mx * 2)
+    for i in range (n):
+        if reverse:
+            y = y2 + i * (y1 - y2) / n
+        else:
+            x = x2 + i * (x1 - x2) / n
+        for j in range(mx * 2):
+            if reverse:
+                x = x2 + j * (x1 - x2) / (mx * 2)
+            else:
+                y = y2 + j * (y1 - y2) / (mx * 2)
             z = f(x, y)
-            xx = coord_x(x, y, z, rev=reverse)
-            yy = coord_y(x, y, z, rev=reverse)
+            xx = coord_x(x, y, z)
+            yy = coord_y(x, y, z)
 
             xx = int((xx - minx) / (maxx - minx) * mx)
             yy = int((yy - miny) / (maxy - miny) * my)
-            print(x, y, xx, yy)
             if xx >= mx:
-                j += 1
                 continue
             if yy > bottom[xx]:
                 putpixel(xx, yy, 'red')
@@ -79,8 +75,7 @@ def main(reverse=False):
             if yy < top[xx]:
                 putpixel(xx, yy, 'blue')
                 top[xx] = yy
-            j += 1
-        i += 1
+  
 
 
 def putpixel(x, y, c):
@@ -93,7 +88,8 @@ win = tkinter.Tk()
 canv = tkinter.Canvas(win, height=h, width=w)
 # xMax = GetSystemMetrics(0)
 # yMax = GetSystemMetrics(1)
+
 main()
-#main(True)
+main(True)
 canv.pack()
 win.mainloop()

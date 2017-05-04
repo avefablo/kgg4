@@ -83,7 +83,7 @@ class KGG3DDrawer(Drawer):
                 if yy < miny:
                     miny = yy
 
-        for i in range(0, n):
+        for i in range(n):
             last_bot = (None, None)
             last_top = (None, None)
             line = [list() for x in range(self.size.width())]
@@ -91,7 +91,7 @@ class KGG3DDrawer(Drawer):
                 y = y2 + i * (y1 - y2) / n
             else:
                 x = x2 + i * (x1 - x2) / n
-            for j in range(self.size.width() * 2 + 1):
+            for j in range(self.size.width() * 2):
                 if reverse:
                     x = x2 + j * (x1 - x2) / (self.size.width() * 2)
                 else:

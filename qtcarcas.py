@@ -2,25 +2,30 @@ import sys, random
 from PyQt4 import QtGui, QtCore
 
 
-class Carcass(QtGui.QWidget):
+class Carcass(QtGui.QGraphicsView):
     def __init__(self, drawer):
         super(Carcass, self).__init__()
-
+        self.scene = QtGui.QGraphicsScene()
+        self.setScene(self.scene)
         self.drawer = drawer
         self.init_ui()
         self.drawer.size = self.size()
+        self.draw_pic()
 
     def init_ui(self):
-        self.setGeometry(0, 0, 800, 600)
+        self.setGeometry(0, 0, 1200, 700)
         self.setWindowTitle('Points')
         self.show()
 
-    def paintEvent(self, e):
+
+    def draw_pic(self):
         self.drawer.size = self.size()
-        qp = QtGui.QPainter()
-        qp.begin(self)
+        pix = QtGui.QPixmap(QtCore.QSize(self.size().width(), self.size().height()))
+        pix.fill(QtCore.Qt.white)
+        qp = QtGui.QPainter(pix)
         self.drawer.draw(qp)
         qp.end()
+        self.scene.addPixmap(pix)
 
 
 class Drawer:

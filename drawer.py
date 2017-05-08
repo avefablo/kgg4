@@ -53,9 +53,9 @@ class KGG3DDrawer(Drawer):
 
     def f2(self, qp, reverse=False):
         x1 = -2
-        x2 = 4
+        x2 = 2
         y1 = -4
-        y2 = 2
+        y2 = 5
         n = 100
         miny = minx = 1000000
         maxy = maxx = -minx
@@ -83,7 +83,7 @@ class KGG3DDrawer(Drawer):
                 if yy < miny:
                     miny = yy
 
-        for i in range(n):
+        for i in range(n+1):
             last_bot = (None, None)
             last_top = (None, None)
             line = [list() for x in range(self.size.width())]
@@ -112,7 +112,7 @@ class KGG3DDrawer(Drawer):
                     bottom[xx] = yy
                     last_bot = (xx, yy)
                     last_top = (None, None)
-                    middle = True
+                    middle = False
 
                 if yy < top[xx]:
                     # self.draw_point(qp, xx, yy, QtCore.Qt.blue)
@@ -123,7 +123,7 @@ class KGG3DDrawer(Drawer):
                     last_top = (xx, yy)
                     last_bot = (None, None)
                     self.pxls[xx][yy] = 'b'
-                    middle = True
+                    middle = False
 
                 if middle:
                     last_bot = (None, None)
@@ -133,6 +133,7 @@ class KGG3DDrawer(Drawer):
 
     @staticmethod
     def get_point_dimetry(x, y, z):
+        return (y-x) * sqrt(3) / 2, (x + y) / 2 - z
         return -x / (2 * sqrt(2)) + y, x / (2 * sqrt(2)) - z
 
     def brez(self, qp, p1, p2, color):

@@ -9,7 +9,7 @@ from math import cos, sin
 
 def main():
     app = QtGui.QApplication(sys.argv)
-    t = lambda x, y: sin(x*y)**2
+    t = lambda x, y: cos(x*y)
     ex = Carcass(KGG3DDrawer(t))
     app.exec_()
     app.deleteLater()
